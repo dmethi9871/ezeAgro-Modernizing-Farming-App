@@ -10,6 +10,7 @@ import Login from './Compnents/Login';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Register from './Compnents/Register';
 import OCRScreen from './Compnents/OCRScreen';
+import LetterGenerator from './Compnents/LetterGenerator';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -132,7 +133,14 @@ const App = () => {
           component={HomeScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="LetterGenerator"
+          component={LetterGenerator}
+          options={{ headerShown: false }}
+        />
+        
       </Stack.Navigator>
+      
     </NavigationContainer>
   );
 };

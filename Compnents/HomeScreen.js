@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, Image,ScrollView } from 'react-native';
-import RegisterImage from '../assets/Register.png';
-import OCRScreen from './OCRScreen';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import OCRScreen from './OCRScreen'; // Import OCRScreen
+import LetterGenerator from './LetterGenerator';
 
 function Card({ title, description, onPress }) {
   return (
@@ -12,28 +12,29 @@ function Card({ title, description, onPress }) {
   );
 }
 
-export default function HomeScreen({ navigation }) {
-  
+export default function HomeScreen({ navigation }) { // Pass navigation prop
   const handlePress = () => {
     console.log('Card pressed!');
-    
+    navigation.navigate('LetterGenerator');
   };
+
   const IMageOCr = () => {
     console.log('Card pressed!');
-    // navigation.navigate(Login);
-    navigation.navigate(OCRScreen);
-    
+    navigation.navigate('ImageOCr'); // Navigate to 'OCRScreen'
+  };
+  const TextToSpecch = () => {
+    console.log('Card pressed!');
+    navigation.navigate('ImageOCr'); // Navigate to 'OCRScreen'
+  };
+  const SpeechtoText = () => {
+    console.log('Card pressed!');
+    navigation.navigate('ImageOCr'); // Navigate to 'OCRScreen'
   };
 
-
   return (
-    
     <View style={styles.container}>
-     
       <Text style={styles.header}>Home!</Text>
-      
       <View style={styles.cardContainer}>
-       
         <Card
           title="Card Title"
           description="This is a description of the card."
@@ -45,9 +46,9 @@ export default function HomeScreen({ navigation }) {
           onPress={handlePress}
         />
         <Card
-          title="TextToIMage"
+          title="TextToImage"
           description="This is yet another description of the card."
-          onPress={IMageOCr}
+          onPress={IMageOCr} // Call IMageOCr function
         />
         <Card
           title="Last Card Title"
@@ -56,26 +57,14 @@ export default function HomeScreen({ navigation }) {
         />
       </View>
     </View>
-    
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
-  },
-  headerImage: {
-    width: '100%',
-    height: 200, 
-    marginBottom: 20, 
   },
   header: {
     fontSize: 24,
