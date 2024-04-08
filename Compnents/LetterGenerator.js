@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, Text, Alert, TouchableOpacity } from 'react-native';
-import { Card, Paragraph, Title, Provider } from 'react-native-paper';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
+import { Card, Title, Provider } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
@@ -23,6 +23,44 @@ export default function LetterGenerator() {
   const [subjectLine, setSubjectLine] = useState('');
   const [referenceNumber, setReferenceNumber] = useState('');
   const [cc, setCC] = useState('');
+
+  const generatePDF = async () => {
+    // Validation
+    if (!senderName || !date || !recipientName || !salutation || !body || !closing) {
+      Alert.alert('Error', 'Please fill in all required fields (marked with *)');
+      return;
+    }
+
+    try {
+      const htmlContent = getHtmlContent();
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+
+      const destination = `${FileSystem.documentDirectory}letter.pdf`;
+
+      await FileSystem.moveAsync({
+        from: uri,
+        to: destination,
+      });
+
+      Alert.alert('Success', 'Letter PDF generated successfully');
+      downloadAsPdf();
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      Alert.alert('Error', 'Failed to generate PDF');
+    }
+  };
+
+  const downloadAsPdf = async () => {
+    try {
+      const htmlContent = getHtmlContent();
+      const { uri } = await Print.printToFileAsync({
+        html: htmlContent,
+      });
+      await Sharing.shareAsync(uri);
+    } catch (error) {
+      console.error('Error printing:', error);
+    }
+  };
 
   const getHtmlContent = () => {
     return `
@@ -56,69 +94,18 @@ export default function LetterGenerator() {
       </html>`;
   };
 
-  const downloadAsPdf = async () => {
-    try {
-      const htmlContent = getHtmlContent();
-      const { uri } = await Print.printToFileAsync({
-        html: htmlContent,
-      });
-      await Sharing.shareAsync(uri);
-    } catch (error) {
-      console.error('Error printing:', error);
-    }
-  };
-  const CustomAlert = ({ title, message }) => {
-    return (
-      <View style={styles.alert}>
-        <Alert.Title>{title}</Alert.Title>
-        <Alert.Content>{message}</Alert.Content>
-      </View>
-    );
-  };
-
-  const generatePDF = async () => {
-    if (!senderName || !date || !recipientName || !salutation || !body || !closing) {
-      Alert.alert('Error', 'Please fill in all required fields (marked with *)');
-      return;
-    }
-
-    try {
-      const htmlContent = getHtmlContent();
-      const { uri } = await Print.printToFileAsync({ html: htmlContent });
-
-      const destination = `${FileSystem.documentDirectory}letter.pdf`;
-
-      await FileSystem.moveAsync({
-        from: uri,
-        to: destination,
-      });
-
-      Alert.alert('Success', 'Letter PDF generated successfully');
-      downloadAsPdf();
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      Alert.alert('Error', 'Failed to generate PDF');
-    }
-  };
-
   return (
     <Provider>
-      <ScrollView style={[styles.container, { marginTop: 50, marginBottom: 30 }]}>
+      <ScrollView style={styles.container}>
         <Card>
           <Card.Content>
-            <Title>Letter Generator</Title>
-          <TextInput
-    style={styles.input}
-    placeholder="*Sender's Name"
-    value={senderName}
-    onChangeText={setSenderName}
-  />
-  <TextInput
-    style={styles.input}
-    placeholder="Sender's Address"
-    value={senderAddress}
-    onChangeText={setSenderAddress}
-  />
+            <Title style={styles.title}>Letter Generator</Title>
+            <TextInput
+              style={styles.input}
+              placeholder="*Sender's Name"
+              value={senderName}
+              onChangeText={setSenderName}
+            />
   <TextInput
     style={styles.input}
     placeholder="Sender's Phone"
@@ -205,7 +192,7 @@ export default function LetterGenerator() {
     onChangeText={setCC}
   />
   
-  <TouchableOpacity onPress={generatePDF}  style={styles.downloadButton}>
+  <TouchableOpacity onPress={generatePDF} style={styles.downloadButton}>
               <Text style={styles.downloadButtonText}>Download as PDF</Text>
             </TouchableOpacity>
           </Card.Content>
@@ -220,12 +207,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
-    marginTop: 200,
   },
-  
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 10,
     padding: 10,
@@ -233,12 +223,13 @@ const styles = StyleSheet.create({
   downloadButton: {
     backgroundColor: '#E30AB8',
     borderRadius: 5,
-    paddingVertical: 10,
+    paddingVertical: 15,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   downloadButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });

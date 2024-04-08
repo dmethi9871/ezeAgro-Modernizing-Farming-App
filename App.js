@@ -2,101 +2,100 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import SplashScreen from './Compnents/SplashScreen';
 import HomeScreen from './Compnents/HomeScreen';
-import SettingsScreen from './Compnents/SettingsScreen';
-import ProfileScreen from './Compnents/ProfileScreen';
 import Login from './Compnents/Login';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Register from './Compnents/Register';
 import OCRScreen from './Compnents/OCRScreen';
 import LetterGenerator from './Compnents/LetterGenerator';
+import About from './Compnents/About';
+import { IconButton } from 'react-native-paper';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 const MainNavigation = () => (
-  <Tab.Navigator
-    tabBarOptions={{
-      activeTintColor: '#007AFF',
-      inactiveTintColor: '#8E8E93',
-      labelStyle: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        marginBottom: 5,
-      },
-      tabStyle: {
-        backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      iconStyle: {
-        marginBottom: 5,
-      },
-      style: {
-        height: 500,
-        position: 'absolute',
-        bottom: 30,
-        left: 0, 
-        right: 0,
-        borderRadius: 20,
-        backgroundColor: '#FFFFFF',
-        elevation: 5, 
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-      },
-    }}
-  >
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Tabs"
+      component={Tabs}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Drawer"
+      component={DrawerScreen}
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const CustomDrawerContent = (props) => {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  );
+};
+
+const Tabs = () => (
+  <Tab.Navigator>
     <Tab.Screen
-      name="login"
-      component={Login}
+      name="Home"
+      component={HomeScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="login" color={color} size={30} /> // Increased icon size to 30
+          <MaterialCommunityIcons name="home" size={size} color={color} />
         ),
       }}
     />
     <Tab.Screen
-      name="Register"
-      component={Register}
+      name="LetterGenerator"
+      component={LetterGenerator}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="Register" color={color} size={30} /> // Increased icon size to 30
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Settings"
-      component={SettingsScreen}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="cog" color={color} size={30} /> // Increased icon size to 30
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="account" color={color} size={30} /> // Increased icon size to 30
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Login"
-      component={Login}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="login" color={color} size={20} /> // Increased icon size to 30
+          <MaterialCommunityIcons name="envelope" size={size} color={color} />
         ),
       }}
     />
   </Tab.Navigator>
+);
+
+const DrawerScreen = () => (
+  <Drawer.Navigator
+    initialRouteName="Home"
+    drawerContent={(props) => <CustomDrawerContent {...props} />}
+  >
+    <Drawer.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="home" size={size} color={color} />
+        ),
+      }}
+    />
+    <Drawer.Screen
+      name="LetterGenerator"
+      component={LetterGenerator}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="envelope" size={size} color={color} />
+        ),
+      }}
+    />
+    <Drawer.Screen
+      name="About"
+      component={About}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="information" size={size} color={color} />
+        ),
+      }}
+    />
+  </Drawer.Navigator>
 );
 
 const App = () => {
@@ -116,7 +115,7 @@ const App = () => {
         <Stack.Screen
           name="ImageOCr"
           component={OCRScreen}
-          options={{ headerShown: false }}
+          options={{ title: '' }}
         />
         <Stack.Screen
           name="MainNavigation"
@@ -128,19 +127,31 @@ const App = () => {
           component={Login}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ headerShown: false }}
+          options={({ navigation }) => ({
+            title: 'Home',
+            headerLeft: () => (
+              <IconButton
+                icon="arrow-left"
+                onPress={() => navigation.goBack()}
+              />
+            ),
+            headerRight: () => (
+              <IconButton
+                icon="dots-vertical"
+                onPress={() => {}}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="LetterGenerator"
           component={LetterGenerator}
-          options={{ headerShown: false }}
+          options={{ title: '' }}
         />
-        
       </Stack.Navigator>
-      
     </NavigationContainer>
   );
 };

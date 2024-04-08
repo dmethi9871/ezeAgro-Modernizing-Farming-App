@@ -80,7 +80,7 @@ export default function OCRScreen() {
   return (
 	
     <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
+      <ScrollView style={styles.card}>
         <Text style={styles.heading2}>Image to Text App</Text>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={pickImageGallery} style={styles.icon}>
@@ -107,7 +107,7 @@ export default function OCRScreen() {
           
         </ScrollView>
 		
-      </View>
+      </ScrollView>
     </SafeAreaView>
 	
   );

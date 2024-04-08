@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Dimensions,Platform, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import SplashScreenImage from '../assets/NewsSplashScreen.jpg'; // Import the background image
 import LogoImage from '../assets/digify_logo.jpeg'; // Import the logo image
@@ -39,8 +39,9 @@ const SplashScreen = ({ navigation }) => {
   );
 };
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+// Determine window dimensions based on platform
+const windowWidth = Platform.OS === 'web' ? window.innerWidth : Dimensions.get('window').width;
+const windowHeight = Platform.OS === 'web' ? window.innerHeight : Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   background: {

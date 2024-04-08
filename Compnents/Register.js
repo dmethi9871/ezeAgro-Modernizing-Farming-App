@@ -1,17 +1,46 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, View, TouchableOpacity, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
+import { Text, SafeAreaView, View, TouchableOpacity, StyleSheet, ImageBackground, Image, ScrollView, Alert } from 'react-native';
 import AppTextInput from './AppTextInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegisterImage from '../assets/Register.png';
 import CompanyLogo from '../assets/digify_logo.jpeg';
+import axios from 'axios'; // Import Axios
 
 const Register = ({ navigation: { navigate } }) => {
-  const [focused, setFocused] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = async () => { // Make handleSubmit an async function
+    if (password !== confirmPassword) {
+      Alert.alert('Password mismatch', 'Please confirm your password correctly.');
+      return;
+    }
+
+    const User = {
+      name: name,
+      email: email,
+      password: password
+    };
+
+    try {
+      const response = await axios.post('http://192.168.29.254:5000/register', User);
+      if (!response.data.success) {
+        throw new Error('Registration1 failed');
+      }
+      Alert.alert('Successfully registered');
+    } catch (error) {
+      console.error(error);
+      
+      Alert.alert('Registration2 failed');
+    }
+  };
 
   return (
     <ImageBackground source={RegisterImage} style={styles.backgroundImage}>
       <SafeAreaView style={styles.container}>
-        {/* <ScrollView contentContainerStyle={styles.scrollView}> */}
+        <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.content}>
             <View style={styles.card}>
               <Image source={CompanyLogo} style={styles.logo} />
@@ -22,12 +51,13 @@ const Register = ({ navigation: { navigate } }) => {
                 </Text>
               </View>
               <View style={styles.form}>
-                <AppTextInput placeholder='Name' icon='person' />
-                <AppTextInput placeholder='Email' icon='mail' />
-                <AppTextInput placeholder='Password' icon='lock-closed' />
-                <AppTextInput placeholder='Confirm Password' icon='lock-closed' />
+                <AppTextInput placeholder='Name' icon='person' onChangeText={setName} />
+                <AppTextInput placeholder='Email' icon='mail' onChangeText={setEmail} />
+                
+                <AppTextInput placeholder='Password' icon='lock-closed' secureTextEntry onChangeText={setPassword} />
+                <AppTextInput placeholder='Confirm Password' icon='lock-closed' secureTextEntry onChangeText={setConfirmPassword} />
               </View>
-              <TouchableOpacity style={styles.signUpButton}>
+              <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
                 <Text style={styles.signUpButtonText}>Sign up</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigate("Login")} style={styles.loginButton}>
@@ -39,12 +69,11 @@ const Register = ({ navigation: { navigate } }) => {
                   <TouchableOpacity style={styles.socialLoginIcon}>
                     <Ionicons name="logo-google" color="#000" size={20} />
                   </TouchableOpacity>
-                  {/* Add more social login icons */}
                 </View>
               </View>
             </View>
           </View>
-        {/* </ScrollView> */}
+        </ScrollView>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -59,9 +88,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-//   scrollView: {
-//     flexGrow: 1,
-//   },
+  scrollView: {
+    flexGrow: 1,
+  },
   content: {
     padding: 20,
     flex: 1,

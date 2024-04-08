@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, Image, ScrollView, StyleSheet } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, Image, ScrollView, StyleSheet,Alert } from 'react-native';
 import AppTextInput from './AppTextInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SplashScreenImage from '../assets/Spla.jpg'; // Import the background image
@@ -8,12 +8,21 @@ import NewSCard from '../assets/Untitled design (1).png' // Import the company l
 import { BackgroundImage } from 'react-native-elements/dist/config';
 
 const Login = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
   const handleForgotPassword = () => {
     Alert.alert("Forgot Password", "Forgot Password functionality coming soon!");
   };
 
   const handleLogin = () => {
-    navigation.navigate("Home");
+    const testEmail = 'test@example.com';
+    const testPassword = 'password'; // Define the test password
+    // Check if the entered email and password match the test credentials
+    if (email === testEmail && password === testPassword) {
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Login Failed", "Invalid email or password.");
+    }
   };
 
   const handleRegister = () => {
@@ -34,8 +43,19 @@ const Login = ({ navigation }) => {
         <View style={styles.card}>
           <Image source={CompanyLogo} style={styles.logo} />
           <Text style={styles.title}>DIGIFY</Text>
-          <AppTextInput placeholder='Email' icon='mail' />
-          <AppTextInput placeholder='Password' icon='lock-closed' />
+          <AppTextInput
+            placeholder='Email'
+            icon='mail'
+            value={email}
+            onChangeText={setEmail}
+          />
+          <AppTextInput
+            placeholder='Password'
+            icon='lock-closed'
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
           <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotPassword}>
             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
           </TouchableOpacity>
