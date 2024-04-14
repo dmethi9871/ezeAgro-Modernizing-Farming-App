@@ -36,7 +36,8 @@
     "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "^0.19.10",
-    "tesseract.js": "^5.0.5"
+    "tesseract.js": "^5.0.5",
+    "expo-speech": "~11.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

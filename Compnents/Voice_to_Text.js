@@ -1,44 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import * as SpeechRecognition from 'expo-speech-recognition';
-import { FontAwesome } from '@expo/vector-icons'; // Assuming you want to use FontAwesome icons
-import { StatusBar } from "expo-status-bar";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "./components/Home";
-import Notes from "./components/Notes";
+// App.js
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import RecordScreen from './RecordScreen';
+import HistoryScreen from './HistoryScreen';
+import { MaterialIcons } from '@expo/vector-icons';
+
 const Tab = createBottomTabNavigator();
 
-const Voice_to_Text = () => {
+export default function Voice_to_Text() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: () => {
-            let iconName = "record";
-            if (route.name === "Record") {
-              iconName = "record-vinyl";
-            } else if (route.name === "History") {
-              iconName = "history";
-            }
-            return <FontAwesome5 name={iconName} size={24} color="black" />;
-          },
-        })}
-      >
-        <Tab.Screen name="Record" component={Home} />
-        <Tab.Screen name="History" component={Notes} />
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Record"
+          component={RecordScreen}
+          options={{
+            tabBarLabel: 'Record',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="mic" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{
+            tabBarLabel: 'History',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="history" size={size} color={color} />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
-

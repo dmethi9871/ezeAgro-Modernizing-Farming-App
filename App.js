@@ -12,6 +12,8 @@ import OCRScreen from './Compnents/OCRScreen';
 import LetterGenerator from './Compnents/LetterGenerator';
 import About from './Compnents/About';
 import { IconButton } from 'react-native-paper';
+import TextToSpeech from './Compnents/TextToSpeeech';
+import Voice_to_Text from './Compnents/Voice_to_Text';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -123,6 +125,27 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="TextToSpeech"
+          component={TextToSpeech}
+          color="primary"
+          options={{ headerShown: true ,
+            
+            headerLeft: () => (
+              <IconButton
+                icon="arrow-left"
+                onPress={() => navigation.goBack()}
+              />
+            
+            ),
+            headerRight: () => (
+              <IconButton
+                icon="dots-vertical"
+                onPress={() => {}}
+              />
+            ), }
+          }
+        />
+        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -150,6 +173,25 @@ const App = () => {
           name="LetterGenerator"
           component={LetterGenerator}
           options={{ title: '' }}
+        />
+        <Stack.Screen
+          name="Speech_To_Text"
+          component={Voice_to_Text}
+          options={({ navigation }) => ({
+            title: 'Speech Text',
+            headerLeft: () => (
+              <IconButton
+                icon="arrow-left"
+                onPress={() => navigation.goBack()}
+              />
+            ),
+            headerRight: () => (
+              <IconButton
+                icon="dots-vertical"
+                onPress={() => {}}
+              />
+            ),
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

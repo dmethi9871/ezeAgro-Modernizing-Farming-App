@@ -38,10 +38,7 @@ export default function HomeScreen({ navigation }) {
     console.log('Card pressed!');
     navigation.navigate('TextToSpeech');
   };
-  const SpeechToText = () => {
-    console.log('Card pressed!');
-    navigation.navigate('SpeechToText');
-  };
+  
   const prewrittenQuestions = [
     { question: 'How do I generate a letter?', answer: 'You can generate a letter by...' },
     { question: 'How does Text to Speech work?', answer: 'Text to Speech works by...' },
@@ -91,7 +88,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.description}>Extract text from images!</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={SpeechToText} style={[styles.card, { backgroundColor: cardColors[3] }]}>
+        <TouchableOpacity onPress={TextToSpeech} style={[styles.card, { backgroundColor: cardColors[3] }]}>
           <FontAwesome5 name="microphone" size={50} color="black" />
           <Text style={styles.title}>Speech to Text</Text>
           <Text style={styles.description}>Convert your speech into text!</Text>

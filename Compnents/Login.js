@@ -18,11 +18,11 @@ const [password, setPassword] = useState('');
     const testEmail = 'test@example.com';
     const testPassword = 'password'; // Define the test password
     // Check if the entered email and password match the test credentials
-    if (email === testEmail && password === testPassword) {
+    // if (email === testEmail && password === testPassword) {
       navigation.navigate("Home");
-    } else {
-      Alert.alert("Login Failed", "Invalid email or password.");
-    }
+    // } else {
+    //   Alert.alert("Login Failed", "Invalid email or password.");
+    // }
   };
 
   const handleRegister = () => {
